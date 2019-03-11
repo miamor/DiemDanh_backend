@@ -11,11 +11,13 @@ class LichHoc extends Config {
     public function getByMaLMH ($maLMH) {
         $cond = 'WHERE MaLMH = '.$maLMH;
         $query = "SELECT
-				    *
-				FROM
-					" . $this->table_name . "
-				$cond
-                ORDER BY Ngay DESC";
+                    *
+				FROM tbl_lichhoc lich
+                LEFT JOIN tbl_diemdanh dd
+                    ON dd.MaLichHoc = lich.MaLichHoc
+                LEFT JOIN tbl_lopmonhoc lh
+                    ON lh.MaLMH = lich.MaLMH
+                ORDER BY lich.Ngay DESC";
 
 		$stmt = $this->conn->prepare($query);
 		$stmt->execute();
@@ -26,6 +28,11 @@ class LichHoc extends Config {
             /*if ($row['MaGVC'] == $teacherID) {
                 $row['role'] = 'GVC';
             }*/
+            if ($row['MaDiemDanh'] != null) {
+                $row['DaDiemDanh'] = true;
+            } else {
+                $row['DaDiemDanh'] = false;
+            }
             $this->all_list[] = $row;
         }
         return $this->all_list;

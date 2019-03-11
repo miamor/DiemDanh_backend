@@ -72,4 +72,26 @@ class DiemDanh extends Config
         } else return false;
     }
 
+    public function getByMaLichHoc($maLichHoc) {
+        $query = "SELECT
+                    *
+				FROM tbl_diemdanh dd
+                JOIN tbl_chitietdiemdanh ctdd
+                    ON dd.MaDiemDanh = ctdd.MaDiemDanh
+                JOIN tbl_lichhoc lich
+                    ON dd.MaLichHoc = lich.MaLichHoc
+                JOIN tbl_sinhvien sv
+                    ON sv.MaSV = ctdd.MaSV
+                ORDER BY sv.HoTen DESC";
+
+		$stmt = $this->conn->prepare($query);
+		$stmt->execute();
+
+		$this->all_list = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $this->all_list[] = $row;
+        }
+        return $this->all_list;
+    }
 }

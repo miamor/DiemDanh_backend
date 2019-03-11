@@ -30,6 +30,33 @@ class SinhVien extends Config {
         return $this->all_list;
     }
 
+    public function getByMaLopMH($maLopMH) {
+        //$cond = 'WHERE MaLop = '.$maLopMH;
+        $query = "SELECT
+				    ctlmh.MaLMH,
+                    sv.*
+				FROM tbl_chitietlopmonhoc ctlmh
+                LEFT JOIN tbl_sinhvien sv
+                    ON sv.MaSV = ctlmh.MaSV
+                JOIN tbl_lopmonhoc lmh
+				    ON ctlmh.MaLMH = '{$maLopMH}' 
+                        AND lmh.MaLMH = ctlmh.MaLMH
+                ORDER BY sv.HoTen DESC";
+
+		$stmt = $this->conn->prepare($query);
+		$stmt->execute();
+
+		$this->all_list = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            /*if ($row['MaGVC'] == $teacherID) {
+                $row['role'] = 'GVC';
+            }*/
+            $this->all_list[] = $row;
+        }
+        return $this->all_list;
+    }
+
     public function readAll () {
         $cond = '';
         $query = "SELECT

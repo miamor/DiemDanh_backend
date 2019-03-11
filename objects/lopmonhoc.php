@@ -35,7 +35,8 @@ class LopMonHoc extends Config {
                     gvp.HoTen as TenGVP,
                     mh.*,
                     lopMH.*,
-                    lop.*
+                    lop.*,
+                    COUNT(ctlmh.MaSV) sv_total
                 FROM tbl_lopmonhoc lopMH
                 LEFT JOIN tbl_monhoc mh
                     ON (lopMH.MaGVC = $teacherID OR MaGVP = $teacherID)
@@ -48,6 +49,11 @@ class LopMonHoc extends Config {
                     ON gvp.MaGV = lopMH.MaGVP
                 LEFT JOIN tbl_bomon bomon
                     ON bomon.MaBM = mh.MaBM
+                LEFT JOIN tbl_chitietlopmonhoc ctlmh
+                    ON ctlmh.MaLMH = lopMH.MaLMH
+                /*LEFT JOIN tbl_sinhvien sv
+                    ON sv.MaSV = ctlmh.MaSV
+                GROUP BY lopMH.MaLMH*/
 
                 -- $cond
                 -- ORDER BY MaLichHoc DESC";
