@@ -13,6 +13,7 @@ class LichHoc extends Config {
         $query = "SELECT
                     lich.*,
                     lh.*,
+                    dd.MaDiemDanh, dd.NgayDiemDanh,
                     count(ctdd_comat.MaSV) comat,
                     count(ctdd_vp.MaSV) vp,
                     count(ctdd_vkp.MaSV) vkp
@@ -23,13 +24,14 @@ class LichHoc extends Config {
                     ON lh.MaLMH = lich.MaLMH
 
                 LEFT JOIN tbl_chitietdiemdanh ctdd_comat
-                    ON (ctdd_comat.TrangThai = 1)
+                    ON (ctdd_comat.TrangThai = 1 AND ctdd_comat.MaDiemDanh = dd.MaDiemDanh)
                 LEFT JOIN tbl_chitietdiemdanh ctdd_vp
                     ON (ctdd_vp.MaDiemDanh = dd.MaDiemDanh
-                        AND ctdd_vp.TrangThai = -1)
+                        AND ctdd_vp.TrangThai = -1 AND ctdd_vp.MaDiemDanh = dd.MaDiemDanh)
                 LEFT JOIN tbl_chitietdiemdanh ctdd_vkp
                     ON (ctdd_vkp.MaDiemDanh = dd.MaDiemDanh
-                        AND ctdd_vkp.TrangThai = -2)
+                        AND ctdd_vkp.TrangThai = -2 AND ctdd_vkp.MaDiemDanh = dd.MaDiemDanh)
+                GROUP BY lich.MaLichHoc
                 ORDER BY lich.Ngay DESC";
 
 		$stmt = $this->conn->prepare($query);
