@@ -11,12 +11,25 @@ class LichHoc extends Config {
     public function getByMaLMH ($maLMH) {
         $cond = 'WHERE MaLMH = '.$maLMH;
         $query = "SELECT
-                    *
+                    lich.*,
+                    lh.*,
+                    count(ctdd_comat.MaSV) comat,
+                    count(ctdd_vp.MaSV) vp,
+                    count(ctdd_vkp.MaSV) vkp
 				FROM tbl_lichhoc lich
                 LEFT JOIN tbl_diemdanh dd
                     ON dd.MaLichHoc = lich.MaLichHoc
                 LEFT JOIN tbl_lopmonhoc lh
                     ON lh.MaLMH = lich.MaLMH
+
+                LEFT JOIN tbl_chitietdiemdanh ctdd_comat
+                    ON (ctdd_comat.TrangThai = 1)
+                LEFT JOIN tbl_chitietdiemdanh ctdd_vp
+                    ON (ctdd_vp.MaDiemDanh = dd.MaDiemDanh
+                        AND ctdd_vp.TrangThai = -1)
+                LEFT JOIN tbl_chitietdiemdanh ctdd_vkp
+                    ON (ctdd_vkp.MaDiemDanh = dd.MaDiemDanh
+                        AND ctdd_vkp.TrangThai = -2)
                 ORDER BY lich.Ngay DESC";
 
 		$stmt = $this->conn->prepare($query);
