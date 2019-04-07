@@ -79,12 +79,14 @@ class DiemDanh extends Config
                 JOIN tbl_chitietdiemdanh ctdd
                     ON dd.MaDiemDanh = ctdd.MaDiemDanh
                 JOIN tbl_lichhoc lich
-                    ON dd.MaLichHoc = lich.MaLichHoc
+                    ON (dd.MaLichHoc = lich.MaLichHoc
+                        AND lich.MaLichHoc = ?)
                 JOIN tbl_sinhvien sv
                     ON sv.MaSV = ctdd.MaSV
                 ORDER BY sv.HoTen DESC";
 
-		$stmt = $this->conn->prepare($query);
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $maLichHoc);
 		$stmt->execute();
 
 		$this->all_list = array();

@@ -6,11 +6,16 @@ if (!$_SESSION['MaGV']) {
 
     $login->username = isset($_POST['username']) ? $_POST['username'] : null;
     $login->password = isset($_POST['password']) ? $_POST['password'] : null;
+    $login->type = isset($_POST['type']) ? $_POST['type'] : null;
 
 //    echo $_POST['username'];
 
     if ($login->username && $login->password) {
-        $do = $login->login();
+        if ($login->type == 'PH') {
+            $do = $login->login_PH();
+        } else {
+            $do = $login->login();
+        }
         if ($do) {
             $_SESSION['MaGV'] = $login->gvInfo['MaGV'];
             echo json_encode(array('status' => 'success', 'data' => $login->gvInfo), JSON_UNESCAPED_UNICODE);

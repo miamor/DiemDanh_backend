@@ -1,6 +1,6 @@
 <?php
 session_start();
-error_reporting(E_ERROR | E_PARSE);
+//error_reporting(E_ERROR | E_PARSE);
 
 $__pattern = '/DiemDanh';
 
@@ -38,7 +38,7 @@ if (check($__page, 'requests')) {
 	$config->__request = explode('.', end(explode('/', $__page)))[0];
 }
 
-header('Content-Type: application/json; charset=utf-8');
+//header('Content-Type: application/json; charset=utf-8');
 // End config
 
 if (isset($_SERVER['HTTP_ORIGIN'])) {
