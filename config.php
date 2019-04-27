@@ -1,6 +1,6 @@
 <?php
 session_start();
-//error_reporting(E_ERROR | E_PARSE);
+error_reporting(E_ERROR | E_PARSE);
 
 $__pattern = '/DiemDanh';
 
@@ -41,11 +41,12 @@ if (check($__page, 'requests')) {
 //header('Content-Type: application/json; charset=utf-8');
 // End config
 
-if (isset($_SERVER['HTTP_ORIGIN'])) {
+
+/*if (isset($_SERVER['HTTP_ORIGIN'])) {
 	header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
 	header('Access-Control-Allow-Credentials: true');
 	header('Access-Control-Max-Age: 86400');// cache for 1 day
-}
+}*/
 
 // Access-Control headers are received during OPTIONS requests
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -57,6 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 	exit(0);
 }
+
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($_POST)) {
     $_POST = json_decode(file_get_contents('php://input'), true);

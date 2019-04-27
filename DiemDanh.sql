@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 24, 2019 at 02:06 PM
+-- Generation Time: Apr 17, 2019 at 12:36 PM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.4
 
@@ -91,7 +91,7 @@ INSERT INTO `tbl_chitietdiemdanh` (`MaChitietDiemdanh`, `MaDiemDanh`, `MaSV`, `T
 (27, 1, 1054030119, 0, NULL),
 (28, 1, 1054030050, 0, NULL),
 (29, 1, 1054030209, 0, NULL),
-(30, 1, 1054030007, 0, NULL),
+(30, 1, 1054030007, -1, 'Ly do nghi phep~~'),
 (31, 1, 1054030330, 0, NULL),
 (32, 1, 1054030006, 0, NULL),
 (33, 1, 1054030001, 0, NULL),
@@ -110,7 +110,49 @@ INSERT INTO `tbl_chitietdiemdanh` (`MaChitietDiemdanh`, `MaDiemDanh`, `MaSV`, `T
 (46, 1, 954030075, 0, NULL),
 (47, 1, 1054030086, 0, NULL),
 (48, 1, 1054030155, 0, NULL),
-(49, 1, 1054030414, 0, NULL);
+(49, 1, 1054030414, 0, NULL),
+(50, 2, 1054030231, 1, NULL),
+(51, 2, 1054030334, -1, 'ikmuj'),
+(52, 2, 1054030032, -2, 'o7,i8mu7n'),
+(53, 2, 1054030440, 0, NULL),
+(54, 2, 1054030016, 0, NULL),
+(55, 2, 1054030272, 0, NULL),
+(56, 2, 1054030237, 0, NULL),
+(57, 2, 1054030221, 0, NULL),
+(58, 2, 1054030122, 0, NULL),
+(59, 2, 1054030119, 0, NULL),
+(60, 2, 1054030007, 1, NULL),
+(61, 2, 1054030006, 0, NULL),
+(62, 2, 1054030244, 0, NULL),
+(63, 2, 1054030328, 0, NULL),
+(64, 2, 1054030412, 0, NULL),
+(65, 2, 1054030264, 0, NULL),
+(66, 2, 1054030086, 0, NULL),
+(67, 3, 1054030231, 1, NULL),
+(68, 3, 1054030334, -1, 'tuynt'),
+(69, 3, 1054030032, 0, NULL),
+(70, 3, 1054030440, 0, NULL),
+(71, 3, 1054030016, 0, NULL),
+(72, 3, 1054030272, 0, NULL),
+(73, 3, 1054030237, 0, NULL),
+(74, 3, 1054030221, 0, NULL),
+(75, 3, 1054030122, 0, NULL),
+(76, 3, 1054030119, 0, NULL),
+(77, 3, 1054030007, 1, NULL),
+(78, 3, 1054030006, 0, NULL),
+(79, 3, 1054030244, 0, NULL),
+(80, 3, 1054030328, 0, NULL),
+(81, 3, 1054030412, 0, NULL),
+(82, 3, 1054030264, 0, NULL),
+(83, 3, 1054030086, 0, NULL),
+(84, 4, NULL, NULL, NULL),
+(85, 4, 1054030007, 1, NULL),
+(86, 4, 1054030221, -1, 'Vang phep'),
+(87, 4, 1054030244, -2, 'Vang khong phep~~~'),
+(88, 5, NULL, NULL, NULL),
+(89, 5, 1054030007, 1, NULL),
+(90, 5, 1054030221, -1, 'Vang phep'),
+(91, 5, 1054030244, -2, 'Vang khong phep~~~');
 
 -- --------------------------------------------------------
 
@@ -165,7 +207,11 @@ CREATE TABLE `tbl_diemdanh` (
 --
 
 INSERT INTO `tbl_diemdanh` (`MaDiemDanh`, `MaLichHoc`, `NgayDiemdanh`, `MaGV`) VALUES
-(1, 15, '2019-02-24', 1);
+(1, 15, '2019-02-24', 1),
+(2, 14, '2019-03-12', 1),
+(3, 13, '2019-03-12', 1),
+(4, 12, '2019-04-16', 1),
+(5, 11, '2019-04-16', 1);
 
 -- --------------------------------------------------------
 
@@ -247,21 +293,21 @@ CREATE TABLE `tbl_lichhoc` (
 --
 
 INSERT INTO `tbl_lichhoc` (`MaLichHoc`, `MaLMH`, `Ngay`, `Phonghoc`, `TietBatDau`, `TietKetThuc`) VALUES
-(1, 1231211, '2018-01-15', 1, 3, 7),
-(2, 1231211, '2018-01-22', 1, 3, 7),
-(3, 1231211, '2018-01-29', 1, 3, 7),
-(4, 1231211, '2018-02-05', 1, 3, 7),
-(5, 1231211, '2018-02-12', 1, 3, 7),
-(6, 1231211, '2018-02-19', 1, 3, 7),
-(7, 1231211, '2018-02-26', 1, 3, 7),
-(8, 1231211, '2018-03-05', 1, 3, 7),
-(9, 1231211, '2018-03-12', 1, 3, 7),
-(10, 1231211, '2018-03-19', 1, 3, 7),
-(11, 1231211, '2018-03-26', 1, 3, 7),
-(12, 1231211, '2018-04-02', 1, 3, 7),
-(13, 1231211, '2018-04-09', 1, 3, 7),
-(14, 1231211, '2018-04-16', 1, 3, 7),
-(15, 1231211, '2018-04-23', 1, 3, 7);
+(1, 1231211, '2019-01-15', 1, 1, 3),
+(2, 1231211, '2019-01-22', 1, 1, 3),
+(3, 1231211, '2019-01-29', 1, 1, 3),
+(4, 1231211, '2019-02-05', 1, 1, 3),
+(5, 1231211, '2019-02-12', 1, 1, 3),
+(6, 1231211, '2019-02-19', 1, 1, 3),
+(7, 1231211, '2019-02-26', 1, 1, 3),
+(8, 1231211, '2019-03-05', 1, 1, 3),
+(9, 1231211, '2019-03-12', 1, 1, 3),
+(10, 1231211, '2019-03-19', 1, 1, 3),
+(11, 1231211, '2019-03-26', 1, 1, 3),
+(12, 1231211, '2019-04-02', 1, 1, 3),
+(13, 1231211, '2019-04-09', 1, 1, 3),
+(14, 1231211, '2019-04-16', 1, 1, 3),
+(15, 1231211, '2019-04-23', 1, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -296,6 +342,9 @@ CREATE TABLE `tbl_lopmonhoc` (
   `MaGVC` int(11) DEFAULT NULL,
   `MaGVP` int(11) DEFAULT NULL,
   `MaHK` int(11) DEFAULT NULL,
+  `Thu` char(3) COLLATE utf8_vietnamese_ci NOT NULL,
+  `TietBD` int(1) NOT NULL,
+  `TietKT` int(1) NOT NULL,
   `TongSoBuoi` int(11) DEFAULT NULL,
   `TrangThai` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
@@ -304,8 +353,8 @@ CREATE TABLE `tbl_lopmonhoc` (
 -- Dumping data for table `tbl_lopmonhoc`
 --
 
-INSERT INTO `tbl_lopmonhoc` (`MaLMH`, `MaMH`, `MaLop`, `MaGVC`, `MaGVP`, `MaHK`, `TongSoBuoi`, `TrangThai`) VALUES
-(1231211, 1, 1, 1, 2, 20191, 15, 1);
+INSERT INTO `tbl_lopmonhoc` (`MaLMH`, `MaMH`, `MaLop`, `MaGVC`, `MaGVP`, `MaHK`, `Thu`, `TietBD`, `TietKT`, `TongSoBuoi`, `TrangThai`) VALUES
+(1231211, 1, 1, 1, 2, 20191, 'Tue', 1, 3, 15, 1);
 
 -- --------------------------------------------------------
 
@@ -548,7 +597,7 @@ ALTER TABLE `tbl_sinhvien`
 -- AUTO_INCREMENT for table `tbl_chitietdiemdanh`
 --
 ALTER TABLE `tbl_chitietdiemdanh`
-  MODIFY `MaChitietDiemdanh` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `MaChitietDiemdanh` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT for table `tbl_chitietlopmonhoc`
@@ -560,7 +609,7 @@ ALTER TABLE `tbl_chitietlopmonhoc`
 -- AUTO_INCREMENT for table `tbl_diemdanh`
 --
 ALTER TABLE `tbl_diemdanh`
-  MODIFY `MaDiemDanh` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `MaDiemDanh` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

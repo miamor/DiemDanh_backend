@@ -25,6 +25,7 @@ class LopMonHoc extends Config
         $this->all_list = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $row['Ngay'] = date("d/m/Y", strtotime($row['Ngay']));
             $this->all_list[] = $row;
         }
         return $this->all_list;
@@ -89,11 +90,73 @@ class LopMonHoc extends Config
             $row['role'] = 'GVC';
             }*/
             if ($row['MaLMH'] != null) {
+                $row['Ngay'] = date("d/m/Y", strtotime($row['Ngay']));
                 $this->all_list[] = $row;
             }
         }
         return $this->all_list;
     }
+
+    public function readAllFromMaSVInWeek($maSV, $dates_in_week)
+    {
+        $dates_in_week_str = '(\''.implode('\',\'', $dates_in_week).'\')';
+        $query = "SELECT
+                    gvc.HoTen as TenGVC,
+                    gvp.HoTen as TenGVP,
+                    mh.*,
+                    lopMH.*,
+                    lop.*,
+                    lich.*,
+                    COUNT(ctlmh.MaSV) sv_total
+                FROM tbl_lopmonhoc lopMH
+                LEFT JOIN tbl_monhoc mh
+                    ON mh.MaMH = lopMH.MaMH
+                LEFT JOIN tbl_lop lop
+                    ON lop.MaLop = lopMH.MaLop
+                LEFT JOIN tbl_giangvien gvc
+                    ON gvc.MaGV = lopMH.MaGVC
+                LEFT JOIN tbl_giangvien gvp
+                    ON gvp.MaGV = lopMH.MaGVP
+                LEFT JOIN tbl_bomon bomon
+                    ON bomon.MaBM = mh.MaBM
+                LEFT JOIN tbl_chitietlopmonhoc ctlmh
+                    ON (ctlmh.MaLMH = lopMH.MaLMH
+                        AND ctlmh.MaSV = ?)
+
+                LEFT JOIN tbl_lichhoc lich
+                    ON (lich.MaLMH = lopMH.MaLMH
+                        AND lich.Ngay IN $dates_in_week_str )
+                ";
+
+        //echo $query;
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $maSV);
+        //$stmt->bindParam(3, $dates_in_week_str);
+        
+        $stmt->execute();
+
+        $this->all_list = array(
+            'Mon'=>array('date'=>date("d/m", strtotime($dates_in_week[0])), 'data'=>array()), 
+            'Tue'=>array('date'=>date("d/m", strtotime($dates_in_week[1])), 'data'=>array()), 
+            'Wed'=>array('date'=>date("d/m", strtotime($dates_in_week[2])), 'data'=>array()), 
+            'Thu'=>array('date'=>date("d/m", strtotime($dates_in_week[3])), 'data'=>array()), 
+            'Fri'=>array('date'=>date("d/m", strtotime($dates_in_week[4])), 'data'=>array()), 
+            'Sat'=>array('date'=>date("d/m", strtotime($dates_in_week[5])), 'data'=>array()), 
+            'Sun'=>array('date'=>date("d/m", strtotime($dates_in_week[6])), 'data'=>array())
+        );
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            //print_r($row);
+            $dayname = date("D", strtotime($row['Ngay']));
+
+            $row['Ngay'] = date("d/m/Y", strtotime($row['Ngay']));
+            
+            $this->all_list[$dayname]['data'][] = $row;
+        }
+        return $this->all_list;
+    }
+
 
     public function readAllFromTeacherInWeek($teacherID, $dates_in_week)
     {
@@ -135,13 +198,22 @@ class LopMonHoc extends Config
         
         $stmt->execute();
 
-        $this->all_list = array('Mon'=>array(), 'Tue'=>array(), 'Wed'=>array(), 'Thu'=>array(), 'Fri'=>array(), 'Sat'=>array(), 'Sun'=>array());
+        $this->all_list = array(
+            'Mon'=>array('date'=>date("d/m", strtotime($dates_in_week[0])), 'data'=>array()), 
+            'Tue'=>array('date'=>date("d/m", strtotime($dates_in_week[1])), 'data'=>array()), 
+            'Wed'=>array('date'=>date("d/m", strtotime($dates_in_week[2])), 'data'=>array()), 
+            'Thu'=>array('date'=>date("d/m", strtotime($dates_in_week[3])), 'data'=>array()), 
+            'Fri'=>array('date'=>date("d/m", strtotime($dates_in_week[4])), 'data'=>array()), 
+            'Sat'=>array('date'=>date("d/m", strtotime($dates_in_week[5])), 'data'=>array()), 
+            'Sun'=>array('date'=>date("d/m", strtotime($dates_in_week[6])), 'data'=>array())
+        );
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             //print_r($row);
             $dayname = date("D", strtotime($row['Ngay']));
+            $row['Ngay'] = date("d/m/Y", strtotime($row['Ngay']));
 
-            $this->all_list[$dayname][] = $row;
+            $this->all_list[$dayname]['data'][] = $row;
         }
         return $this->all_list;
     }
@@ -184,6 +256,7 @@ class LopMonHoc extends Config
             /*if ($row['MaGVC'] == $teacherID) {
             $row['role'] = 'GVC';
             }*/
+            $row['Ngay'] = date("d/m/Y", strtotime($row['Ngay']));
             $this->all_list[] = $row;
         }
         return $this->all_list;
