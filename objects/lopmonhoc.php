@@ -3,6 +3,7 @@ class LopMonHoc extends Config
 {
 
     private $table_name = "tbl_lopmonhoc";
+    public $msg;
 
     public function __construct()
     {
@@ -26,6 +27,9 @@ class LopMonHoc extends Config
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $row['Ngay'] = date("d/m/Y", strtotime($row['Ngay']));
+
+            $row['MaHK'] = substr($row['MaHK'], 4, 5) . ', ' . substr($row['MaHK'], 0, 4);
+
             $this->all_list[] = $row;
         }
         return $this->all_list;
@@ -91,6 +95,9 @@ class LopMonHoc extends Config
             }*/
             if ($row['MaLMH'] != null) {
                 $row['Ngay'] = date("d/m/Y", strtotime($row['Ngay']));
+
+                $row['MaHK'] = substr($row['MaHK'], 4, 5) . ', ' . substr($row['MaHK'], 0, 4);
+
                 $this->all_list[] = $row;
             }
         }
@@ -99,7 +106,7 @@ class LopMonHoc extends Config
 
     public function readAllFromMaSVInWeek($maSV, $dates_in_week)
     {
-        $dates_in_week_str = '(\''.implode('\',\'', $dates_in_week).'\')';
+        $dates_in_week_str = '(\'' . implode('\',\'', $dates_in_week) . '\')';
         $query = "SELECT
                     gvc.HoTen as TenGVC,
                     gvp.HoTen as TenGVP,
@@ -129,21 +136,21 @@ class LopMonHoc extends Config
                 ";
 
         //echo $query;
-        
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $maSV);
         //$stmt->bindParam(3, $dates_in_week_str);
-        
+
         $stmt->execute();
 
         $this->all_list = array(
-            'Mon'=>array('date'=>date("d/m", strtotime($dates_in_week[0])), 'data'=>array()), 
-            'Tue'=>array('date'=>date("d/m", strtotime($dates_in_week[1])), 'data'=>array()), 
-            'Wed'=>array('date'=>date("d/m", strtotime($dates_in_week[2])), 'data'=>array()), 
-            'Thu'=>array('date'=>date("d/m", strtotime($dates_in_week[3])), 'data'=>array()), 
-            'Fri'=>array('date'=>date("d/m", strtotime($dates_in_week[4])), 'data'=>array()), 
-            'Sat'=>array('date'=>date("d/m", strtotime($dates_in_week[5])), 'data'=>array()), 
-            'Sun'=>array('date'=>date("d/m", strtotime($dates_in_week[6])), 'data'=>array())
+            'Mon' => array('date' => date("d/m", strtotime($dates_in_week[0])), 'data' => array()),
+            'Tue' => array('date' => date("d/m", strtotime($dates_in_week[1])), 'data' => array()),
+            'Wed' => array('date' => date("d/m", strtotime($dates_in_week[2])), 'data' => array()),
+            'Thu' => array('date' => date("d/m", strtotime($dates_in_week[3])), 'data' => array()),
+            'Fri' => array('date' => date("d/m", strtotime($dates_in_week[4])), 'data' => array()),
+            'Sat' => array('date' => date("d/m", strtotime($dates_in_week[5])), 'data' => array()),
+            'Sun' => array('date' => date("d/m", strtotime($dates_in_week[6])), 'data' => array()),
         );
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -151,16 +158,17 @@ class LopMonHoc extends Config
             $dayname = date("D", strtotime($row['Ngay']));
 
             $row['Ngay'] = date("d/m/Y", strtotime($row['Ngay']));
-            
+
+            $row['MaHK'] = substr($row['MaHK'], 4, 5) . ', ' . substr($row['MaHK'], 0, 4);
+
             $this->all_list[$dayname]['data'][] = $row;
         }
         return $this->all_list;
     }
 
-
     public function readAllFromTeacherInWeek($teacherID, $dates_in_week)
     {
-        $dates_in_week_str = '(\''.implode('\',\'', $dates_in_week).'\')';
+        $dates_in_week_str = '(\'' . implode('\',\'', $dates_in_week) . '\')';
         $query = "SELECT
                     gvc.HoTen as TenGVC,
                     gvp.HoTen as TenGVP,
@@ -190,28 +198,30 @@ class LopMonHoc extends Config
                 ";
 
         //echo $query;
-        
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $teacherID);
         $stmt->bindParam(2, $teacherID);
         //$stmt->bindParam(3, $dates_in_week_str);
-        
+
         $stmt->execute();
 
         $this->all_list = array(
-            'Mon'=>array('date'=>date("d/m", strtotime($dates_in_week[0])), 'data'=>array()), 
-            'Tue'=>array('date'=>date("d/m", strtotime($dates_in_week[1])), 'data'=>array()), 
-            'Wed'=>array('date'=>date("d/m", strtotime($dates_in_week[2])), 'data'=>array()), 
-            'Thu'=>array('date'=>date("d/m", strtotime($dates_in_week[3])), 'data'=>array()), 
-            'Fri'=>array('date'=>date("d/m", strtotime($dates_in_week[4])), 'data'=>array()), 
-            'Sat'=>array('date'=>date("d/m", strtotime($dates_in_week[5])), 'data'=>array()), 
-            'Sun'=>array('date'=>date("d/m", strtotime($dates_in_week[6])), 'data'=>array())
+            'Mon' => array('date' => date("d/m", strtotime($dates_in_week[0])), 'data' => array()),
+            'Tue' => array('date' => date("d/m", strtotime($dates_in_week[1])), 'data' => array()),
+            'Wed' => array('date' => date("d/m", strtotime($dates_in_week[2])), 'data' => array()),
+            'Thu' => array('date' => date("d/m", strtotime($dates_in_week[3])), 'data' => array()),
+            'Fri' => array('date' => date("d/m", strtotime($dates_in_week[4])), 'data' => array()),
+            'Sat' => array('date' => date("d/m", strtotime($dates_in_week[5])), 'data' => array()),
+            'Sun' => array('date' => date("d/m", strtotime($dates_in_week[6])), 'data' => array()),
         );
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             //print_r($row);
             $dayname = date("D", strtotime($row['Ngay']));
             $row['Ngay'] = date("d/m/Y", strtotime($row['Ngay']));
+
+            $row['MaHK'] = substr($row['MaHK'], 4, 5) . ', ' . substr($row['MaHK'], 0, 4);
 
             $this->all_list[$dayname]['data'][] = $row;
         }
@@ -242,8 +252,8 @@ class LopMonHoc extends Config
                 LEFT JOIN tbl_chitietlopmonhoc ctlmh
                     ON ctlmh.MaLMH = lopMH.MaLMH
                 /*LEFT JOIN tbl_sinhvien sv
-                    ON sv.MaSV = ctlmh.MaSV
-                GROUP BY lopMH.MaLMH*/
+                    ON sv.MaSV = ctlmh.MaSV*/
+                GROUP BY lopMH.MaLMH
 
                 -- ORDER BY MaLichHoc DESC";
 
@@ -257,6 +267,9 @@ class LopMonHoc extends Config
             $row['role'] = 'GVC';
             }*/
             $row['Ngay'] = date("d/m/Y", strtotime($row['Ngay']));
+
+            $row['MaHK'] = substr($row['MaHK'], 4, 5) . ', ' . substr($row['MaHK'], 0, 4);
+
             $this->all_list[] = $row;
         }
         return $this->all_list;
@@ -276,6 +289,133 @@ class LopMonHoc extends Config
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return ($row['MaLMH'] ? $row : null);
+    }
+
+    public function submitDSSV()
+    {
+        $ok = true;
+        foreach ($this->DSSV as $dk => $sv) {
+            // check if this sinhvien is in db
+            $query = "SELECT * FROM tbl_sinhvien WHERE MaSV = ? LIMIT 0,1";
+
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(1, $sv['MaSV']);
+            $stmt->execute();
+            $sv_record = $stmt->fetch(PDO::FETCH_ASSOC);
+            // $this->msg = $sv_record;
+            if (!$sv_record['MaSV']) {
+                // add sinhvien
+                $query = "INSERT INTO
+                            tbl_sinhvien
+                        SET
+                            MaSV = ?, HoTen = ?";
+
+                $stmty = $this->conn->prepare($query);
+                $stmty->bindParam(1, $sv['MaSV']);
+                $stmty->bindParam(2, $sv['HoTen']);
+
+                if (!$stmty->execute()) {
+                    $ok = false;
+                    break;
+                }
+            }
+
+            // check if this sinhvien is in this lopmonhoc
+            $query = "SELECT * FROM tbl_chitietlopmonhoc WHERE MaSV = ? AND MaLMH = ? LIMIT 0,1";
+
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(1, $sv['MaSV']);
+            $stmt->bindParam(2, $this->MaLMH);
+            $stmt->execute();
+            $ctlmh_record = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$ctlmh_record['ID']) {
+                // add this sinhvien to this lopmonhoc
+                $query = "INSERT INTO
+                            tbl_chitietlopmonhoc
+                        SET
+                            MaSV = ?, MaLMH = ?";
+
+                $stmty = $this->conn->prepare($query);
+                $stmty->bindParam(1, $sv['MaSV']);
+                $stmty->bindParam(2, $this->MaLMH);
+
+                if (!$stmty->execute()) {
+                    $ok = false;
+                    break;
+                }
+            }
+        }
+
+        return $ok;
+
+    }
+
+    public function stat()
+    {
+        $query = "SELECT
+                    sv.MaSV, sv.HoTen,
+                    lich.MaLichHoc,
+                    ctdd.*
+                FROM tbl_sinhvien sv
+                LEFT JOIN tbl_chitietlopmonhoc ctlmh
+                    ON ctlmh.MaLMH = ? AND ctlmh.MaSV = sv.MaSV
+                RIGHT OUTER JOIN tbl_lichhoc lich
+                    ON lich.MaLMH = ctlmh.MaLMH
+                LEFT OUTER JOIN tbl_diemdanh dd
+                    ON dd.MaLichHoc = lich.MaLichHoc
+                LEFT OUTER JOIN tbl_chitietdiemdanh ctdd
+                    ON ctdd.MaDiemDanh = dd.MaDiemDanh
+                ";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->MaLMH);
+        $stmt->execute();
+
+        $this->all_list = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            if (!$this->all_list[$row['MaSV']]) {
+                $this->all_list[$row['MaSV']] = array();
+            }
+            $this->all_list[$row['MaSV']][$row['MaLichHoc']] = $row;
+        }
+
+        return $this->all_list;
+    }
+
+    public function stat_by_lichhoc()
+    {
+        $query = "SELECT
+                    sv.*,
+                    lich.*,
+                    ctdd.*
+                FROM tbl_chitietdiemdanh ctdd
+                LEFT JOIN tbl_diemdanh dd
+                    ON ctdd.MaDiemDanh = dd.MaDiemDanh
+                LEFT JOIN tbl_chitietlopmonhoc ctlmh
+                    ON ctlmh.MaLMH = ?
+                RIGHT JOIN tbl_lichhoc lich
+                    ON (lich.MaLMH = ctlmh.MaLMH AND dd.MaLichHoc = lich.MaLichHoc)
+                LEFT JOIN tbl_sinhvien sv
+                    ON ctlmh.MaSV = sv.MaSV
+                ";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->MaLMH);
+        $stmt->execute();
+
+        $this->all_list = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            if (!$this->all_list[$row['MaLichHoc']]) {
+                $this->all_list[$row['MaLichHoc']] = array();
+            }
+            if ($row['MaSV']) {
+                $this->all_list[$row['MaLichHoc']][$row['MaSV']] = $row;
+            }
+        }
+
+        return $this->all_list;
     }
 
 }

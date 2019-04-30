@@ -19,6 +19,7 @@ class Login extends Config {
 		$stmt->execute();
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        $row['NgaySinh'] = date("d/m/Y", strtotime($row['NgaySinh']));
         $this->gvInfo = $row;
         return $row;
 
@@ -37,16 +38,18 @@ class Login extends Config {
 
     public function login_PH () {
         $query = "SELECT
-					*
+					ph.*, sv.*
 				FROM
-					tbl_phuhuynh
-				WHERE MaSV = ? ";
+					tbl_phuhuynh ph
+                LEFT JOIN tbl_sinhvien sv
+                    ON sv.MaSV = ? AND sv.MaSV = ph.MaSV";
         $stmt = $this->conn->prepare($query);
 		$stmt->bindParam(1, $this->username);
 
 		$stmt->execute();
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        $row['NgaySinh'] = date("d/m/Y", strtotime($row['NgaySinh']));
         $this->gvInfo = $row;
         return $row;
 
