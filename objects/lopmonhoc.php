@@ -75,8 +75,8 @@ class LopMonHoc extends Config
                     ON (ctdd_vkp.MaDiemDanh = dd.MaDiemDanh
                         AND ctdd_vkp.MaSV = ? AND ctdd_vkp.TrangThai = -2)
                 /*LEFT JOIN tbl_sinhvien sv
-                    ON sv.MaSV = ctlmh.MaSV
-                GROUP BY lopMH.MaLMH*/
+                    ON sv.MaSV = ctlmh.MaSV*/
+                GROUP BY lopMH.MaLMH
 
                 -- ORDER BY MaLichHoc DESC";
 
@@ -94,7 +94,7 @@ class LopMonHoc extends Config
             $row['role'] = 'GVC';
             }*/
             if ($row['MaLMH'] != null) {
-                $row['Ngay'] = date("d/m/Y", strtotime($row['Ngay']));
+                // $row['Ngay'] = date("d/m/Y", strtotime($row['Ngay']));
 
                 $row['MaHK'] = substr($row['MaHK'], 4, 5) . ', ' . substr($row['MaHK'], 0, 4);
 

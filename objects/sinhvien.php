@@ -14,7 +14,7 @@ class SinhVien extends Config {
 				FROM
 					" . $this->table_name . "
 				$cond
-                ORDER BY HoTen DESC";
+                ORDER BY orders DESC";
 
 		$stmt = $this->conn->prepare($query);
 		$stmt->execute();
@@ -25,6 +25,7 @@ class SinhVien extends Config {
             /*if ($row['MaGVC'] == $teacherID) {
                 $row['role'] = 'GVC';
             }*/
+            $row['NgaySinh'] = date("d/m/Y", strtotime($row['NgaySinh']));
             $this->all_list[] = $row;
         }
         return $this->all_list;
@@ -41,7 +42,7 @@ class SinhVien extends Config {
                 JOIN tbl_lopmonhoc lmh
 				    ON ctlmh.MaLMH = '{$maLopMH}' 
                         AND lmh.MaLMH = ctlmh.MaLMH
-                ORDER BY sv.HoTen DESC";
+                ORDER BY sv.orders DESC";
 
 		$stmt = $this->conn->prepare($query);
 		$stmt->execute();
@@ -52,6 +53,7 @@ class SinhVien extends Config {
             /*if ($row['MaGVC'] == $teacherID) {
                 $row['role'] = 'GVC';
             }*/
+            $row['NgaySinh'] = date("d/m/Y", strtotime($row['NgaySinh']));
             $this->all_list[] = $row;
         }
         return $this->all_list;
@@ -64,7 +66,7 @@ class SinhVien extends Config {
 				FROM
 					" . $this->table_name . "
 				{$cond}
-                ORDER BY HoTen DESC";
+                ORDER BY orders DESC";
 
 		$stmt = $this->conn->prepare($query);
 		$stmt->execute();
@@ -72,6 +74,7 @@ class SinhVien extends Config {
 		$this->all_list = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $this->all_list[] = $row;
             $this->all_list[] = $row;
         }
         return $this->all_list;

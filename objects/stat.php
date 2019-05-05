@@ -39,7 +39,6 @@ class Stat extends Config
 
     }
 
-
     public function stat_PH_details($maSV)
     {
         $query = "SELECT
@@ -61,10 +60,11 @@ class Stat extends Config
 
                 JOIN tbl_sinhvien sv
                     ON (sv.MaSV = ctdd.MaSV
-                        AND sv.MaSV = '1054030007')
+                        AND sv.MaSV = ?)
                 ";
 
         $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $maSV);
         $stmt->execute();
 
         $this->all_list = array();
@@ -80,7 +80,7 @@ class Stat extends Config
                 $data['total_vkp']++;
             }
             $data['total_lessons']++;
-            
+
             if (!in_array($row['MaLMH'], $lopMH)) {
                 $lopMH[] = $row['MaLMH'];
             }
@@ -88,6 +88,63 @@ class Stat extends Config
             $data['details'][] = $row;
         }
         $data['total_lmh'] = count($lopMH);
+
+        return $data;
+
+    }
+
+    public function noti_PH($maSV)
+    {
+
+        $query = "SELECT
+                    ctdd.*,
+                    lich.*,
+                    lmh.MaLMH, lmh.TongSoBuoi, 
+                    mh.TenMH
+                FROM tbl_chitietdiemdanh ctdd
+
+                JOIN tbl_diemdanh dd
+                    ON (dd.MaDiemDanh = ctdd.MaDiemDanh)
+                JOIN tbl_lichhoc lich
+                    ON (dd.MaLichHoc = lich.MaLichHoc)
+                JOIN tbl_lopmonhoc lmh
+                    ON (lmh.MaLMH = lich.MaLMH)
+                JOIN tbl_monhoc mh
+                    ON (lmh.MaMH = mh.MaMH)
+
+                JOIN tbl_sinhvien sv
+                    ON (sv.MaSV = ctdd.MaSV
+                        AND sv.MaSV = ?)
+                ";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $maSV);
+        $stmt->execute();
+
+        $data = array();
+        $tot_buoi = array(); // tong so buoi
+        $tot_vang = array(); // tong so buoi nghi
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            // if (!$tot_buoi[$row['MaLMH']]) $tot_buoi[$row['MaLMH']] = 0;
+            // $tot_buoi[$row['MaLMH']]++;
+            if (!$tot_buoi[$row['MaLMH']]) $tot_buoi[$row['MaLMH']] = $row['TongSoBuoi'];
+
+            if (!$tot_vang[$row['MaLMH']]) $tot_vang[$row['MaLMH']] = 0;
+            if ($row['TrangThai'] == -1 || $row['TrangThai'] == -2) {
+                $tot_vang[$row['MaLMH']]++;
+            }
+
+        }
+        
+        foreach ($tot_vang as $i => $v) {
+            if ($v > 0.3*$tot_buoi[$i]) {
+                $data[$i] = array(
+                    'tongsobuoi' => $tot_buoi[$i],
+                    'tongvang' => $v
+                );
+            }
+        }
 
         return $data;
 
