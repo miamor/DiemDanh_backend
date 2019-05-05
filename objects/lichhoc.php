@@ -95,7 +95,8 @@ class LichHoc extends Config {
             $this->all_list[$ord]['tongvang'] = $vp[$row['MaLichHoc']] + $vkp[$row['MaLichHoc']];
         }
         // return json_decode(json_encode($this->all_list), true);
-        return array_reverse(array_reverse($this->all_list));
+        // return array_reverse(array_reverse($this->all_list));
+        return array_reverse($this->all_list);
     }
 
 
