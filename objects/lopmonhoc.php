@@ -308,11 +308,12 @@ class LopMonHoc extends Config
                 $query = "INSERT INTO
                             tbl_sinhvien
                         SET
-                            MaSV = ?, HoTen = ?";
+                            MaSV = ?, HoTen = ?, NgaySinh = ?";
 
                 $stmty = $this->conn->prepare($query);
                 $stmty->bindParam(1, $sv['MaSV']);
                 $stmty->bindParam(2, $sv['HoTen']);
+                $stmty->bindParam(3, date("Y-m-d H:i:s", strtotime(str_replace('/', '-', $sv['NgaySinh']))));
 
                 if (!$stmty->execute()) {
                     $ok = false;
