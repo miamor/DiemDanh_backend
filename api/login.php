@@ -20,6 +20,6 @@ if (!$_SESSION['MaGV']) {
             $_SESSION['MaGV'] = $login->gvInfo['MaGV'];
             echo json_encode(array('status' => 'success', 'data' => $login->gvInfo), JSON_UNESCAPED_UNICODE);
         } else
-            echo json_encode(array('status' => 'error', 'msg' => 'System error'), JSON_UNESCAPED_UNICODE);
-    } else echo json_encode(array('status' => 'error', 'msg' => 'Missing fields'), JSON_UNESCAPED_UNICODE);
+            echo json_encode(array('status' => 'error', 'msg' => 'Username or password mismatched'), JSON_UNESCAPED_UNICODE);
+    } else echo json_encode(array('status' => 'error', 'msg' => 'Username and password required'), JSON_UNESCAPED_UNICODE);
 } else echo json_encode(array('status' => 'error', 'msg' => 'Already logged in'), JSON_UNESCAPED_UNICODE);
