@@ -9,30 +9,46 @@ class DiemDanh extends Config
 
     public function submit()
     {
-        $query = "INSERT INTO
+        $query = "SELECT * FROM
                 tbl_diemdanh
-            SET
-                MaLichHoc = ?, NgayDiemDanh = ?, MaGV = ?";
-        $stmt = $this->conn->prepare($query);
-		$stmt->bindParam(1, $this->MaLichHoc);
-        $stmt->bindParam(2, $this->NgayDiemDanh);
-        $stmt->bindParam(3, $this->MaGV);
+            WHERE MaLichHoc = ? AND NgayDiemDanh = ? /*AND MaGV = ?*/
+            ORDER BY MaDiemDanh DESC
+            LIMIT 0,1";
+        $stmtq = $this->conn->prepare($query);
+        $stmtq->bindParam(1, $this->MaLichHoc);
+        $stmtq->bindParam(2, $this->NgayDiemDanh);
+        $stmtq->execute();
+        $row = $stmtq->fetch(PDO::FETCH_ASSOC);
 
-        if ($stmt->execute()) {
-            $query = "SELECT
-                    *
-                FROM
+        
+        if (!$row || !$row['id']) {
+            $query = "INSERT INTO
                     tbl_diemdanh
-                WHERE MaLichHoc = ? AND NgayDiemDanh = ? /*AND MaGV = ?*/
-                ORDER BY MaDiemDanh DESC
-                LIMIT 0,1";
-            $stmtq = $this->conn->prepare($query);
-            $stmtq->bindParam(1, $this->MaLichHoc);
-            $stmtq->bindParam(2, $this->NgayDiemDanh);
-            // $stmtq->bindParam(3, $this->MaGV);
-            $stmtq->execute();
-            $row = $stmtq->fetch(PDO::FETCH_ASSOC);
+                SET
+                    MaLichHoc = ?, NgayDiemDanh = ?, MaGV = ?";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(1, $this->MaLichHoc);
+            $stmt->bindParam(2, $this->NgayDiemDanh);
+            $stmt->bindParam(3, $this->MaGV);
 
+            if ($stmt->execute()) {
+                $query = "SELECT
+                        *
+                    FROM
+                        tbl_diemdanh
+                    WHERE MaLichHoc = ? AND NgayDiemDanh = ? /*AND MaGV = ?*/
+                    ORDER BY MaDiemDanh DESC
+                    LIMIT 0,1";
+                $stmtq = $this->conn->prepare($query);
+                $stmtq->bindParam(1, $this->MaLichHoc);
+                $stmtq->bindParam(2, $this->NgayDiemDanh);
+                // $stmtq->bindParam(3, $this->MaGV);
+                $stmtq->execute();
+                $row = $stmtq->fetch(PDO::FETCH_ASSOC);
+            }
+        }
+
+        if ($row && $row['id']) {
             $ok = true;
 
             foreach ($this->CTDD as $dk => $dd) {

@@ -38,11 +38,10 @@ class Login extends Config {
 
     public function login_PH () {
         $query = "SELECT
-					ph.*, sv.*
+					sv.*
 				FROM
-					tbl_phuhuynh ph
-                LEFT JOIN tbl_sinhvien sv
-                    ON sv.MaSV = ? AND sv.MaSV = ph.MaSV";
+					tbl_sinhvien sv
+                ON sv.MaSV = ?";
         $stmt = $this->conn->prepare($query);
 		$stmt->bindParam(1, $this->username);
 
