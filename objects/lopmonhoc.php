@@ -178,23 +178,22 @@ class LopMonHoc extends Config
                     lich.*,
                     COUNT(ctlmh.MaSV) sv_total
                 FROM tbl_lopmonhoc lopMH
-                LEFT JOIN tbl_monhoc mh
+                JOIN tbl_monhoc mh
                     ON (lopMH.MaGVC = ? OR MaGVP = ?)
                         AND mh.MaMH = lopMH.MaMH
-                LEFT JOIN tbl_lop lop
+                JOIN tbl_lop lop
                     ON lop.MaLop = lopMH.MaLop
-                LEFT JOIN tbl_giangvien gvc
+                JOIN tbl_giangvien gvc
                     ON gvc.MaGV = lopMH.MaGVC
-                LEFT JOIN tbl_giangvien gvp
+                JOIN tbl_giangvien gvp
                     ON gvp.MaGV = lopMH.MaGVP
-                LEFT JOIN tbl_bomon bomon
-                    ON bomon.MaBM = mh.MaBM
-                LEFT JOIN tbl_chitietlopmonhoc ctlmh
+                /*JOIN tbl_bomon bomon
+                    ON bomon.MaBM = mh.MaBM*/
+                JOIN tbl_chitietlopmonhoc ctlmh
                     ON ctlmh.MaLMH = lopMH.MaLMH
 
-                LEFT JOIN tbl_lichhoc lich
-                    ON (lich.MaLMH = lopMH.MaLMH
-                        AND lich.Ngay IN $dates_in_week_str )
+                JOIN tbl_lichhoc lich
+                    ON (lich.MaLMH = lopMH.MaLMH )
                 ";
 
         //echo $query;

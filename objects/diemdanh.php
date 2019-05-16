@@ -23,13 +23,13 @@ class DiemDanh extends Config
                     *
                 FROM
                     tbl_diemdanh
-                WHERE MaLichHoc = ? AND NgayDiemDanh = ? AND MaGV = ?
+                WHERE MaLichHoc = ? AND NgayDiemDanh = ? /*AND MaGV = ?*/
                 ORDER BY MaDiemDanh DESC
                 LIMIT 0,1";
             $stmtq = $this->conn->prepare($query);
             $stmtq->bindParam(1, $this->MaLichHoc);
             $stmtq->bindParam(2, $this->NgayDiemDanh);
-            $stmtq->bindParam(3, $this->MaGV);
+            // $stmtq->bindParam(3, $this->MaGV);
             $stmtq->execute();
             $row = $stmtq->fetch(PDO::FETCH_ASSOC);
 
