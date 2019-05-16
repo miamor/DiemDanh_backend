@@ -193,7 +193,8 @@ class LopMonHoc extends Config
                     ON ctlmh.MaLMH = lopMH.MaLMH
 
                 JOIN tbl_lichhoc lich
-                    ON (lich.MaLMH = lopMH.MaLMH )
+                    ON (lich.MaLMH = lopMH.MaLMH
+                        AND lich.Ngay IN $dates_in_week_str )
                 ";
 
         //echo $query;
