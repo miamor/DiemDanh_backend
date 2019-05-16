@@ -41,7 +41,7 @@ class Login extends Config {
 					sv.*
 				FROM
 					tbl_sinhvien sv
-                ON sv.MaSV = ?";
+                WHERE sv.MaSV = ?";
         $stmt = $this->conn->prepare($query);
 		$stmt->bindParam(1, $this->username);
 

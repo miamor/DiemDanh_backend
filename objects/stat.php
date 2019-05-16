@@ -99,7 +99,7 @@ class Stat extends Config
         $query = "SELECT
                     ctdd.*,
                     lich.*,
-                    lmh.MaLMH, lmh.TongSoBuoi, 
+                    lmh.MaLMH, lmh.TongSoBuoi,
                     mh.TenMH
                 FROM tbl_chitietdiemdanh ctdd
 
@@ -124,6 +124,7 @@ class Stat extends Config
         $data = array();
         $tot_buoi = array(); // tong so buoi
         $tot_vang = array(); // tong so buoi nghi
+        $name = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             // if (!$tot_buoi[$row['MaLMH']]) $tot_buoi[$row['MaLMH']] = 0;
@@ -134,12 +135,14 @@ class Stat extends Config
             if ($row['TrangThai'] == -1 || $row['TrangThai'] == -2) {
                 $tot_vang[$row['MaLMH']]++;
             }
+            $name[$row['MaLMH']] = $row['TenMH'];
 
         }
         
         foreach ($tot_vang as $i => $v) {
-            if ($v > 0.3*$tot_buoi[$i]) {
+            if ($v > 1) {
                 $data[$i] = array(
+                    'TenLMH' => $name[$i],
                     'tongsobuoi' => $tot_buoi[$i],
                     'tongvang' => $v
                 );
