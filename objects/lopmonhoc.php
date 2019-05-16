@@ -104,7 +104,7 @@ class LopMonHoc extends Config
         return $this->all_list;
     }
 
-    public function readAllFromMaSVInWeek($maSV, $dates_in_week)
+    public function readAllFromMaSVInWeek__($maSV, $dates_in_week)
     {
         $dates_in_week_str = '(\'' . implode('\',\'', $dates_in_week) . '\')';
         $query = "SELECT
@@ -166,7 +166,7 @@ class LopMonHoc extends Config
         return $this->all_list;
     }
 
-    public function readAllFromTeacherInWeek($teacherID, $dates_in_week)
+    public function readAllFromTeacherInWeek__($teacherID, $dates_in_week)
     {
         $dates_in_week_str = '(\'' . implode('\',\'', $dates_in_week) . '\')';
         $query = "SELECT
@@ -194,7 +194,7 @@ class LopMonHoc extends Config
 
                 JOIN tbl_lichhoc lich
                     ON (lich.MaLMH = lopMH.MaLMH
-                        /*AND lich.Ngay IN $dates_in_week_str*/ )
+                        AND lich.Ngay IN $dates_in_week_str )
                 ";
 
         //echo $query;
@@ -227,6 +227,148 @@ class LopMonHoc extends Config
         }
         return $this->all_list;
     }
+
+
+
+    public function readAllFromTeacherInWeek($teacherID, $dates_in_week)
+    {
+        $dates_in_week_str = '(\'' . implode('\',\'', $dates_in_week) . '\')';
+        $query = "SELECT
+                    gvc.HoTen as TenGVC,
+                    gvp.HoTen as TenGVP,
+                    mh.*,
+                    lopMH.*,
+                    lop.*,
+                    COUNT(ctlmh.MaSV) sv_total
+                FROM tbl_lopmonhoc lopMH
+                LEFT JOIN tbl_monhoc mh
+                    ON (lopMH.MaGVC = $teacherID OR MaGVP = $teacherID)
+                        AND mh.MaMH = lopMH.MaMH
+                LEFT JOIN tbl_lop lop
+                    ON lop.MaLop = lopMH.MaLop
+                LEFT JOIN tbl_giangvien gvc
+                    ON gvc.MaGV = lopMH.MaGVC
+                LEFT JOIN tbl_giangvien gvp
+                    ON gvp.MaGV = lopMH.MaGVP
+                LEFT JOIN tbl_bomon bomon
+                    ON bomon.MaBM = mh.MaBM
+                LEFT JOIN tbl_chitietlopmonhoc ctlmh
+                    ON ctlmh.MaLMH = lopMH.MaLMH
+                /*LEFT JOIN tbl_sinhvien sv
+                    ON sv.MaSV = ctlmh.MaSV*/
+                GROUP BY lopMH.MaLMH";
+
+        //echo $query;
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $teacherID);
+        $stmt->bindParam(2, $teacherID);
+        //$stmt->bindParam(3, $dates_in_week_str);
+
+        $stmt->execute();
+
+        $this->all_list = array(
+            'Mon' => array('date' => date("d/m", strtotime($dates_in_week[0])), 'data' => array()),
+            'Tue' => array('date' => date("d/m", strtotime($dates_in_week[1])), 'data' => array()),
+            'Wed' => array('date' => date("d/m", strtotime($dates_in_week[2])), 'data' => array()),
+            'Thu' => array('date' => date("d/m", strtotime($dates_in_week[3])), 'data' => array()),
+            'Fri' => array('date' => date("d/m", strtotime($dates_in_week[4])), 'data' => array()),
+            'Sat' => array('date' => date("d/m", strtotime($dates_in_week[5])), 'data' => array()),
+            'Sun' => array('date' => date("d/m", strtotime($dates_in_week[6])), 'data' => array()),
+        );
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            //print_r($row);
+            // $dayname = date("D", strtotime($row['Ngay']));
+            // $row['Ngay'] = date("d/m/Y", strtotime($row['Ngay']));
+
+            $dayname = $row['Thu'];
+
+            $row['MaHK'] = substr($row['MaHK'], 4, 5) . ', ' . substr($row['MaHK'], 0, 4);
+
+            $this->all_list[$dayname]['data'][] = $row;
+        }
+        return $this->all_list;
+    }
+
+
+    public function readAllFromMaSVInWeek($maSV, $dates_in_week)
+    {
+        $dates_in_week_str = '(\'' . implode('\',\'', $dates_in_week) . '\')';
+        $query = "SELECT
+                    gvc.HoTen as TenGVC,
+                    gvp.HoTen as TenGVP,
+                    mh.*,
+                    lopMH.*,
+                    COUNT(ctlmh.MaSV) sv_total,
+                    COUNT(dd.MaDiemDanh) total_dd,
+                    COUNT(ctdd_cm.MaChitietDiemdanh) total_comat,
+                    COUNT(ctdd_vp.MaChitietDiemdanh) total_vp,
+                    COUNT(ctdd_vkp.MaChitietDiemdanh) total_vkp
+                FROM tbl_lopmonhoc lopMH
+                JOIN tbl_chitietlopmonhoc ctlmh
+                    ON (ctlmh.MaLMH = lopMH.MaLMH
+                        AND ctlmh.MaSV = ?)
+                LEFT JOIN tbl_monhoc mh
+                    ON mh.MaMH = lopMH.MaMH
+                /*LEFT JOIN tbl_lop lop
+                    ON lop.MaLop = lopMH.MaLop*/
+                LEFT JOIN tbl_giangvien gvc
+                    ON gvc.MaGV = lopMH.MaGVC
+                LEFT JOIN tbl_giangvien gvp
+                    ON gvp.MaGV = lopMH.MaGVP
+                /*LEFT JOIN tbl_bomon bomon
+                    ON bomon.MaBM = mh.MaBM*/
+                LEFT JOIN tbl_lichhoc lh
+                    ON lh.MaLMH = lopMH.MaLMH
+                LEFT JOIN tbl_diemdanh dd
+                    ON dd.MaLichHoc = lh.MaLichHoc
+                LEFT JOIN tbl_chitietdiemdanh ctdd_cm
+                    ON (ctdd_cm.MaDiemDanh = dd.MaDiemDanh
+                        AND ctdd_cm.MaSV = ? AND ctdd_cm.TrangThai = 1)
+                LEFT JOIN tbl_chitietdiemdanh ctdd_vp
+                    ON (ctdd_vp.MaDiemDanh = dd.MaDiemDanh
+                        AND ctdd_vp.MaSV = ? AND ctdd_vp.TrangThai = -1)
+                LEFT JOIN tbl_chitietdiemdanh ctdd_vkp
+                    ON (ctdd_vkp.MaDiemDanh = dd.MaDiemDanh
+                        AND ctdd_vkp.MaSV = ? AND ctdd_vkp.TrangThai = -2)
+                /*LEFT JOIN tbl_sinhvien sv
+                    ON sv.MaSV = ctlmh.MaSV*/
+                GROUP BY lopMH.MaLMH
+                ";
+
+        //echo $query;
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $maSV);
+        $stmt->bindParam(2, $maSV);
+        $stmt->bindParam(3, $maSV);
+        $stmt->bindParam(4, $maSV);
+        //$stmt->bindParam(3, $dates_in_week_str);
+
+        $stmt->execute();
+
+        $this->all_list = array(
+            'Mon' => array('date' => date("d/m", strtotime($dates_in_week[0])), 'data' => array()),
+            'Tue' => array('date' => date("d/m", strtotime($dates_in_week[1])), 'data' => array()),
+            'Wed' => array('date' => date("d/m", strtotime($dates_in_week[2])), 'data' => array()),
+            'Thu' => array('date' => date("d/m", strtotime($dates_in_week[3])), 'data' => array()),
+            'Fri' => array('date' => date("d/m", strtotime($dates_in_week[4])), 'data' => array()),
+            'Sat' => array('date' => date("d/m", strtotime($dates_in_week[5])), 'data' => array()),
+            'Sun' => array('date' => date("d/m", strtotime($dates_in_week[6])), 'data' => array()),
+        );
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            //print_r($row);
+            $dayname = $row['Thu'];
+
+            $row['MaHK'] = substr($row['MaHK'], 4, 5) . ', ' . substr($row['MaHK'], 0, 4);
+
+            $this->all_list[$dayname]['data'][] = $row;
+        }
+        return $this->all_list;
+    }
+
 
     public function readAllFromTeacher($teacherID)
     {
