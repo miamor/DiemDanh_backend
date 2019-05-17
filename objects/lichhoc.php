@@ -146,7 +146,8 @@ class LichHoc extends Config {
 
             $this->all_list[] = $row;
         }
-        return $this->all_list;
+        // return $this->all_list;
+        return array_reverse($this->all_list);
     }
 
 
