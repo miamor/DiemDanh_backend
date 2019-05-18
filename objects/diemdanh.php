@@ -11,14 +11,16 @@ class DiemDanh extends Config
     {
         $query = "SELECT * FROM
                 tbl_diemdanh
-            WHERE MaLichHoc = ? AND NgayDiemDanh = ? /*AND MaGV = ?*/
+            WHERE MaLichHoc = ? /*AND NgayDiemDanh = ? /*AND MaGV = ?*/
             ORDER BY MaDiemDanh DESC
             LIMIT 0,1";
         $stmtq = $this->conn->prepare($query);
         $stmtq->bindParam(1, $this->MaLichHoc);
-        $stmtq->bindParam(2, $this->NgayDiemDanh);
+        // $stmtq->bindParam(2, $this->NgayDiemDanh);
         $stmtq->execute();
         $row = $stmtq->fetch(PDO::FETCH_ASSOC);
+
+        // echo $this->NgayDiemDanh.'~~~~';
 
         
         if (!$row || !$row['id']) {
@@ -48,7 +50,7 @@ class DiemDanh extends Config
             }
         }
 
-        if ($row && $row['id']) {
+        if ($row && $row['MaDiemDanh']) {
             $ok = true;
 
             foreach ($this->CTDD as $dk => $dd) {
